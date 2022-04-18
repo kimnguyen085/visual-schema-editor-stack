@@ -1,0 +1,32 @@
+.header-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+  background-color: blanchedalmond;
+  height: 100%;
+}
+
+.logo-display {
+  justify-content: flex-start;
+  height: 60px;
+  width: 60px;
+}
+
+.user-profile-header {
+  height: 40px;
+  width: 40px;
+  padding: 10px 10px 10px 10px;
+}
+
+.body-left-panel {
+  justify-content: flex-start;
+  width: 50%;
+}
+
+.body-right-panel {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

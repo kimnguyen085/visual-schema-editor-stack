@@ -1,0 +1,1 @@
+create table json_schema_tbl(id bigint auto_increment, generated_json varchar(255));
