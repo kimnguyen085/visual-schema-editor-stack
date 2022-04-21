@@ -23,13 +23,17 @@ function findTheKeyAndAdd(sourceObject, destinationKey, addItem) {
     if (key == destinationKey) {
       if (typeof sourceObject[key] === 'object') {
         var length = Object.keys(sourceObject[key]).length;
-        if (length !== 0) {
+        if (length !== 0 && addItem?.prop !== 'object') {
           var propKey = Object.keys(addItem)[0];
           addItem[propKey+''+length] = addItem[propKey];
           delete addItem[propKey];
           // console.log(addItem, ' -------------');
-        }      
+        }
+        if (addItem?.prop === 'object') {
+          addItem['object'+length] = {};
+        }
         sourceObject[key] = {...sourceObject[key], ...addItem};
+
       }
       return sourceObject;
     }
