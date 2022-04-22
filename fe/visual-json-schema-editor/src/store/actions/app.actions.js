@@ -6,6 +6,7 @@ export const VIEW_JSON_SCHEMA = 'VIEW_JSON_SCHEMA';
 export const CLEAR_JSON_SCHEMA = 'CLEAR_JSON_SCHEMA';
 export const HIDE_MESSAGE = 'MESSAGE_CLOSE';
 export const SHOW_MESSAGE = 'MESSAGE_SHOW';
+export const GENERATE_JSON_SCHEMA = 'GENERATE_JSON_SCHEMA';
 
 function findTheKeyAndAdd(sourceObject, destinationKey, addItem) {
   // console.log(sourceObject, destinationKey, addItem);
@@ -43,10 +44,17 @@ function findTheKeyAndAdd(sourceObject, destinationKey, addItem) {
   return sourceObject;
 }
 
-export function viewJsonSchema(schema) {
+export function generateJsonSchema(schema) {
+    return {
+        type: GENERATE_JSON_SCHEMA,
+        payload: schema
+    };
+}
+
+export function viewJsonSchema() {
   return {
     type: VIEW_JSON_SCHEMA,
-    payload: schema
+    // payload: schema
   };
 }
 
@@ -62,6 +70,12 @@ export function addJsonSchema(crrTree, addItem, destinationItem) {
       type: MODIFY_JSON_TREE,
       payload: modifiedTree
   };
+}
+
+export function jsonTreeChanges() {
+    return {
+        type: MODIFY_JSON_TREE
+    };
 }
 
 export function saveJsonSchema(schema) {  

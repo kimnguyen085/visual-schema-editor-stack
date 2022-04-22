@@ -1,4 +1,5 @@
 import * as Actions from '../actions/app.actions';
+var merge = require('lodash.merge');
 
 const initialState = {
     state  : false,
@@ -48,7 +49,8 @@ const initialState = {
         message         : "Hi",
         variant         : null
     },
-    loading: false
+    loading: false,
+    clearSchema: false
 };
 
 const appReducers = function (state = initialState, action) {
@@ -74,7 +76,7 @@ const appReducers = function (state = initialState, action) {
         {
             return {
                 ...state,
-                generatedSchema: action.payload,
+                // generatedSchema: action.payload,
             }   
         }
         case Actions.CLEAR_JSON_SCHEMA:
@@ -82,7 +84,16 @@ const appReducers = function (state = initialState, action) {
             return {
                 ...state,
                 jsonTreeSchema: {},
-                generatedSchema: {}
+                generatedSchema: {},
+                clearSchema: !state.clearSchema
+            }
+        }
+        case Actions.GENERATE_JSON_SCHEMA:
+        {
+            return {
+                ...state,
+                generatedSchema: merge(state.generatedSchema, action.payload),// {...state.generatedSchema, ...action.payload},
+                loading: !state.loading,
             }
         }
         case Actions.SHOW_MESSAGE:

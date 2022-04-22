@@ -22,7 +22,8 @@ function RightLayout() {
   const generatedSchema = useSelector(({app}) => app.generatedSchema);
 
   const viewButtonClick = () => {
-    dispatch(Actions.viewJsonSchema(generateJsonSchema(jsonTreeSchema)));
+    dispatch(Actions.viewJsonSchema());
+    // dispatch(Actions.viewJsonSchema(generateJsonSchema(jsonTreeSchema)));
     handleClickToOpen();
   }
 
@@ -62,7 +63,7 @@ function RightLayout() {
     <Dialog open={open} onClose={handleToClose}>
         <DialogTitle>{"Generated Json Schema"}</DialogTitle>
         <DialogContent>
-          <textarea style={{height:"450px", width:"400px"}} readOnly="readOnly" value={JSON.stringify(generatedSchema, undefined, 4)}/>
+          <textarea style={{height:"450px", width:"400px"}} readOnly="readOnly" value={JSON.stringify(generatedSchema.prop, undefined, 4)}/>
           
         </DialogContent>
         <DialogActions>

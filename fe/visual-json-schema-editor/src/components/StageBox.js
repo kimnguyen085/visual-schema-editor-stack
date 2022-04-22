@@ -14,6 +14,7 @@ import notIco from "../assets/not24.png";
 import refIco from "../assets/ref24.png";
 import definitionsIco from "../assets/object24.png";
 import jsonIco from "../assets/json.png";
+import * as Actions from "../store/actions/app.actions";
 
 function StageBox() {
   const dispatch = useDispatch();
@@ -23,6 +24,12 @@ function StageBox() {
   const [audit, setAudit] = useState(true);
   const [implementation, setImplementation] = useState(true);
   const [allComponents, setallComponents] = useState([]);
+
+  function buildTreeSchema(childrenSchema) {
+    var schema = {...childrenSchema};
+    console.log(schema);
+    dispatch(Actions.generateJsonSchema(schema));
+  }
 
   function generateRandomId() {
     return Math.random();
@@ -70,7 +77,7 @@ function StageBox() {
   return <React.Fragment>
     <div className="stage-box-content">
       {
-        <StageBoxDroppableZone src={jsonIco} label={"jsonSchema"} value={"schema"}/>
+        <StageBoxDroppableZone src={jsonIco} label={"jsonSchema"} value={"schema"} removeFunc={() => {return true}} buildTreeSchemaFunc={buildTreeSchema} parentNode={null} isRoot={true}/>
       }
       {
         recursiveDisplayTree(jsonTreeSchema)
