@@ -18,7 +18,7 @@ import refIco from "../assets/ref24.png";
 import definitionsIco from "../assets/object24.png";
 import {clear} from "@testing-library/user-event/dist/clear";
 
-var merge = require('lodash.merge');
+var _ = require('lodash');
 const stageBoxDroppable = function StageBoxDroppableZone(props) {
   const dispatch = useDispatch();
   const jsonTreeSchema = useSelector(({app}) => app.jsonTreeSchema);
@@ -32,7 +32,7 @@ const stageBoxDroppable = function StageBoxDroppableZone(props) {
   const [projectionTree, setProjectionTree] = useState({});
 
   function buildTreeSchema(crrChildrenSchema) {
-    console.log(crrChildrenSchema, childrenSchema, generatedSchema, props.label);
+    // console.log(crrChildrenSchema, childrenSchema, generatedSchema, props.label);
     // setChildrenSchema({...childrenSchema, ...crrChildrenSchema});
     // -> setChildrenSchema(crrChildrenSchema);
     setObjToAdd(crrChildrenSchema);
@@ -40,7 +40,7 @@ const stageBoxDroppable = function StageBoxDroppableZone(props) {
   }
 
   function removeTreeSchema(crrChildrenSchema) {
-    console.log(crrChildrenSchema, '++++++++++++');
+    // console.log(crrChildrenSchema, '++++++++++++');
     setProjectionTree(crrChildrenSchema);
   }
 
@@ -53,20 +53,20 @@ const stageBoxDroppable = function StageBoxDroppableZone(props) {
     } else {
       schema[label] = value;
     }
-    console.log('generated', schema);
+    // console.log('generated', schema);
     setGeneratedSchema(schema);
   }
 
   function createChildren(ico, label, value) {
     var counter = children.length;
     label = children.length > 0 ? (label+''+counter) : label;
-    children.push(<StageBoxDroppableZone src={ico} label={label} value={value} removeFunc={(param) => removeNode(param)} buildTreeSchemaFunc={(obj) => buildTreeSchema(obj)} removeTreeSchemaFunc={removeTreeSchema} parentNode={{"label": label}}/>);
+    children.push(<StageBoxDroppableZone src={ico} label={label} value={value} removeFunc={(param) => removeNode(param)} buildTreeSchemaFunc={(obj) => buildTreeSchema(obj)} removeTreeSchemaFunc={removeTreeSchema}/>);
     setChildren(children);
     // console.log(children);
   }
 
   function removeNode(label) {
-    console.log('clicked', generatedSchema, label, children);
+    // console.log('clicked', generatedSchema, label, children);
     // modify children
     if (label == null) {
       // remove all
@@ -78,7 +78,7 @@ const stageBoxDroppable = function StageBoxDroppableZone(props) {
       let newChildren = children.filter(obj => {return obj.props.label !== label});
       setChildren(newChildren);
     }
-    // setLabelToRemove(label);
+    setLabelToRemove(label);
     dispatch(Actions.jsonTreeChanges());
   }
 
@@ -88,7 +88,7 @@ const stageBoxDroppable = function StageBoxDroppableZone(props) {
       let objKey = item.treeKey;let objValue = item.treeValue;
       let obj = {};
       obj[objKey] = objValue;
-      console.log('create children ', item.treeKey, item.treeValue, monitor.getItem());
+      // console.log('create children ', item.treeKey, item.treeValue, monitor.getItem());
       createChildren(item.src, item.treeKey, item.treeValue);
     },
     canDrop: () => true,
@@ -99,7 +99,7 @@ const stageBoxDroppable = function StageBoxDroppableZone(props) {
   }), [])
 
   useEffect(() => {
-    console.log('generated schema changed', generatedSchema);
+    // console.log('generated schema changed', generatedSchema);
   }, [ generatedSchema ]);
 
   useEffect(() => {
@@ -107,24 +107,23 @@ const stageBoxDroppable = function StageBoxDroppableZone(props) {
   },[children])
 
   useEffect(() => {
-    let newChildrenSchema = merge(childrenSchema, objToAdd);
-    console.log('objToAdd Changesss', newChildrenSchema, generatedSchema, props.label);
+    let newChildrenSchema = _.merge(childrenSchema, objToAdd);
+    // console.log('objToAdd Changesss', newChildrenSchema, generatedSchema, props.label);
     setChildrenSchema(newChildrenSchema);
 
     var toSend = {};
-    if (props.parentNode && props.label.includes('prop') && !props.label.includes('properties')) {
+    if (props.label.includes('prop') && !props.label.includes('properties')) {
       // toSend[props.label] = {...generatedSchema[props.label], ...childrenSchema};
-      toSend[props.label] = merge(generatedSchema[props.label], childrenSchema);
-      console.log(1, props.parentNode.label);
-    } else if (props.parentNode && props.label.includes('properties')) {
+      toSend[props.label] = _.merge(generatedSchema[props.label], childrenSchema);
+      // console.log(1, props.parentNode.label);
+    } else if (props.label.includes('properties')) {
       // toSend[props.label] = {...generatedSchema[props.label], ...childrenSchema};
-      toSend[props.label] = merge(generatedSchema[props.label], childrenSchema);
-      console.log(2, props.parentNode); // parentNode not using anywhere
+      toSend[props.label] = _.merge(generatedSchema[props.label], childrenSchema);
     } else {
       // toSend = {...generatedSchema, ...childrenSchema};
-      toSend = merge(generatedSchema, childrenSchema);
+      toSend = _.merge(generatedSchema, childrenSchema);
     }
-    console.log(toSend, props.label, childrenSchema, generatedSchema, '3333333333333');
+    // console.log(toSend, props.label, childrenSchema, generatedSchema, '3333333333333');
     setGeneratedSchema(toSend);
     props.buildTreeSchemaFunc(generatedSchema);
   }, [objToAdd])
@@ -140,31 +139,45 @@ const stageBoxDroppable = function StageBoxDroppableZone(props) {
     removeNode(null);
   },[clearSchema])
 
-  // useEffect(() => {
-  //   // modify generated schema
-  //   if (generatedSchema[props.label])
-  //     generatedSchema[props.label] = projectionTree;
-  //
-  //   props.removeTreeSchemaFunc(generatedSchema);
-  //   setGeneratedSchema(generatedSchema);
-  // }, [projectionTree])
+  useEffect(() => {
+    // console.log(projection tree changes, objToAdd,generatedSchema, props.label);
+    if (props.value === 'object') {
+      generatedSchema[props.label]['properties'] = projectionTree['properties'];
+    } else if (props.value == 'schema') {
+      generatedSchema[Object.keys(objToAdd)[0]] = objToAdd[Object.keys(objToAdd)[0]];
+    }
+    // generatedSchema[props.label] = {...objToAdd};
+    // console.log(objToAdd);
+    setChildrenSchema(projectionTree);
+    props.removeTreeSchemaFunc(generatedSchema);
+    // console.log('asdfsadfqwerj238', objToAdd,generatedSchema);
+    // props.removeTreeSchemaFunc(generatedSchema);
+    // setGeneratedSchema(generatedSchema);
+  }, [projectionTree])
 
-  // useEffect(() => {
-  //   // console.log('isJsonChange', generatedSchema);
-  //   // props.buildTreeSchemaFunc(generatedSchema);
-  //
-  //   console.log(generatedSchema);
-  //   // modify generated schema
-  //   generatedSchema[props.label] && Object.keys(generatedSchema[props.label]).map((key, idx) => {
-  //     if (key == labelToRemove) {
-  //       console.log(generatedSchema[props.label], key, labelToRemove , "_+_+_+_+_+_+");
-  //       // delete generatedSchema[props.label][key];
-  //     }
-  //   });
-  //   console.log('---------------', generatedSchema, labelToRemove);
-  //   props.removeTreeSchemaFunc(generatedSchema);
-  //   setGeneratedSchema(generatedSchema);
-  // }, [labelToRemove])
+  useEffect(() => {
+    // console.log('isJsonChange', generatedSchema);
+    // props.buildTreeSchemaFunc(generatedSchema);
+
+    // console.log(generatedSchema);
+    // modify generated schema
+    childrenSchema && Object.keys(childrenSchema).map((key, idx) => {
+      if (key == labelToRemove) {
+        console.log(childrenSchema[key], key, labelToRemove , "_+_+_+_+_+_+");
+        delete childrenSchema[key];
+      }
+    });
+    generatedSchema[props.label] && Object.keys(generatedSchema[props.label]).map((key, idx) => {
+      if (key == labelToRemove) {
+        console.log(generatedSchema[props.label], key, labelToRemove , "_+_+_+_+_+_+");
+        delete generatedSchema[props.label][key];
+      }
+    });
+
+    // console.log('LabelToRemove change', generatedSchema, labelToRemove);
+    props.removeTreeSchemaFunc(generatedSchema);
+    setGeneratedSchema(generatedSchema);
+  }, [labelToRemove])
 
   Object.entries(generatedSchema).length == 0 && generateSchema(props.label, props.value);
 

@@ -1,5 +1,5 @@
 import * as Actions from '../actions/app.actions';
-var merge = require('lodash.merge');
+var _ = require('lodash');
 
 const initialState = {
     state  : false,

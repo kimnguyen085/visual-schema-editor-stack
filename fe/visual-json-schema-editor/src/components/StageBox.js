@@ -28,13 +28,13 @@ function StageBox() {
 
   function buildTreeSchema(childrenSchema) {
     var schema = {...childrenSchema};
-    console.log(schema);
+    // console.log(schema);
     dispatch(Actions.generateJsonSchema(schema));
   }
 
   function removeTreeSchema(childrenSchema) {
     var schema = {...childrenSchema};
-    console.log(schema);
+    // console.log(schema);
     dispatch(Actions.generateJsonSchema(schema));
   }
 
@@ -84,7 +84,7 @@ function StageBox() {
   return <React.Fragment>
     <div className="stage-box-content">
       {
-        <StageBoxDroppableZone src={jsonIco} label={"jsonSchema"} value={"schema"} removeFunc={() => {return true}} buildTreeSchemaFunc={(obj) => buildTreeSchema(obj)} removeTreeSchemaFunc={removeTreeSchema} parentNode={null} isRoot={true}/>
+        <StageBoxDroppableZone src={jsonIco} label={"jsonSchema"} value={"schema"} removeFunc={() => {return true}} buildTreeSchemaFunc={(obj) => buildTreeSchema(obj)} removeTreeSchemaFunc={removeTreeSchema} isRoot={true}/>
       }
       {
         //recursiveDisplayTree(jsonTreeSchema)
