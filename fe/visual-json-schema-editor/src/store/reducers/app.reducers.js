@@ -50,7 +50,8 @@ const initialState = {
         variant         : null
     },
     loading: false,
-    clearSchema: false
+    clearSchema: false,
+    isJsonChanges: false,
 };
 
 const appReducers = function (state = initialState, action) {
@@ -70,6 +71,13 @@ const appReducers = function (state = initialState, action) {
                 ...state,
                 loading: !state.loading,
                 jsonTreeSchema: action.payload,
+            }
+        }
+        case Actions.IS_JSON_TREE_CHANGES:
+        {
+            return {
+                ...state,
+                isJsonChanges: !state.isJsonChanges,
             }
         }
         case Actions.VIEW_JSON_SCHEMA:
@@ -92,7 +100,8 @@ const appReducers = function (state = initialState, action) {
         {
             return {
                 ...state,
-                generatedSchema: merge(state.generatedSchema, action.payload),// {...state.generatedSchema, ...action.payload},
+                // generatedSchema: merge(state.generatedSchema, action.payload),// {...state.generatedSchema, ...action.payload},
+                generatedSchema: action.payload,
                 loading: !state.loading,
             }
         }

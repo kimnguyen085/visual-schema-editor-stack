@@ -20,12 +20,19 @@ function StageBox() {
   const dispatch = useDispatch();
   const generatedSchema = useSelector(({app}) => app.generatedSchema);
   const jsonTreeSchema = useSelector(({app}) => app.jsonTreeSchema);
+  const isJsonChanges = useSelector(({app}) => app.isJsonChanges);
   const loading = useSelector(({app}) => app.loading);
   const [audit, setAudit] = useState(true);
   const [implementation, setImplementation] = useState(true);
   const [allComponents, setallComponents] = useState([]);
 
   function buildTreeSchema(childrenSchema) {
+    var schema = {...childrenSchema};
+    console.log(schema);
+    dispatch(Actions.generateJsonSchema(schema));
+  }
+
+  function removeTreeSchema(childrenSchema) {
     var schema = {...childrenSchema};
     console.log(schema);
     dispatch(Actions.generateJsonSchema(schema));
@@ -72,15 +79,15 @@ function StageBox() {
 
   useEffect(()=> {
 
-  }, [loading, jsonTreeSchema])
+  }, [loading, isJsonChanges])
 
   return <React.Fragment>
     <div className="stage-box-content">
       {
-        <StageBoxDroppableZone src={jsonIco} label={"jsonSchema"} value={"schema"} removeFunc={() => {return true}} buildTreeSchemaFunc={buildTreeSchema} parentNode={null} isRoot={true}/>
+        <StageBoxDroppableZone src={jsonIco} label={"jsonSchema"} value={"schema"} removeFunc={() => {return true}} buildTreeSchemaFunc={(obj) => buildTreeSchema(obj)} removeTreeSchemaFunc={removeTreeSchema} parentNode={null} isRoot={true}/>
       }
       {
-        recursiveDisplayTree(jsonTreeSchema)
+        //recursiveDisplayTree(jsonTreeSchema)
       }
     </div>
   </React.Fragment>;

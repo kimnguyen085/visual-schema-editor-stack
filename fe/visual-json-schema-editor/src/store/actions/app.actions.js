@@ -7,6 +7,7 @@ export const CLEAR_JSON_SCHEMA = 'CLEAR_JSON_SCHEMA';
 export const HIDE_MESSAGE = 'MESSAGE_CLOSE';
 export const SHOW_MESSAGE = 'MESSAGE_SHOW';
 export const GENERATE_JSON_SCHEMA = 'GENERATE_JSON_SCHEMA';
+export const IS_JSON_TREE_CHANGES = 'IS_JSON_TREE_CHANGES';
 
 function findTheKeyAndAdd(sourceObject, destinationKey, addItem) {
   // console.log(sourceObject, destinationKey, addItem);
@@ -74,7 +75,7 @@ export function addJsonSchema(crrTree, addItem, destinationItem) {
 
 export function jsonTreeChanges() {
     return {
-        type: MODIFY_JSON_TREE
+        type: IS_JSON_TREE_CHANGES
     };
 }
 
