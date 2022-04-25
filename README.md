@@ -67,6 +67,6 @@ See the section about [deployment](https://facebook.github.io/create-react-app/d
 
 ## Progress Infos
 
-I did try my best to implement the tool but there are still missing features and buggy screens. Further details about progress info can be found in each fe and be README file. 
+Further details about progress info can be found in each fe and be README file. 
 
 Ideal working schema tree is `json-schema-root > objects > properties > [integer, number, boolean, etc]`
